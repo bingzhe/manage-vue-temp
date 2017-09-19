@@ -1,6 +1,5 @@
 <template>
   <div class="login-container">
-      111111
   </div>
 </template>
 
@@ -14,6 +13,11 @@ export default {
 $or: #ccc;
 
 .login-container{
+  position: absolute;
+  width:100%;
+  height: 100%;
+  width: 100vw;
+  height: 100vw;
   background-color: $or;
 }
 
