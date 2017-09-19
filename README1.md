@@ -1,6 +1,6 @@
-## manage template vue
+# shop
 
-vue后台管理基本模板
+> A Vue.js project
 
 ## Build Setup
 
