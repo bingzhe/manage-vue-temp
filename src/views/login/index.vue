@@ -10,8 +10,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+$or: #ccc;
+
+.login-container{
+  background-color: $or;
+}
 
 </style>
-
-
