@@ -16,7 +16,7 @@
           <el-form-item prop="password">
             <el-input name="password" v-model="loginForm.password" />
           </el-form-item>
-        
+
         </el-form>
       </div>
       <!-- login end -->
@@ -43,6 +43,18 @@ export default {
         password: '6-12位数字'
       }
     }
+  },
+  methods: {
+    // 判断是否是无效的空值
+    isEmpty(value) {
+      var comparable = [null, 'undefined', undefined, 'N/A', '0', 0, 'null', [], {}]
+      return !(comparable.indexOf(value) > 0)
+    }
+    //   //使用场景
+    //   if(isEmpty(value)) {
+    //     // ...
+    //   }
+    // }
   }
 }
 </script>
@@ -84,6 +96,7 @@ $blue: rgb(98, 138, 233);
     border-left: 1px solid rgb(244, 244, 244);
   }
 }
+
 .el-input {
   width: 260px;
 }
