@@ -7,9 +7,12 @@
     <div class="login-content clearfix">
       <!-- login start -->
       <div class="login-left left">
-        <el-form :model="loginForm">
+        <el-form class="card-box login-form" :model="loginForm" ref="loginForm" label-position="left">
 
           <el-form-item prop="username">
+            <span class="svg-container svg-container_login">
+              <img src="../../assets/account.png" alt="">
+            </span>
             <el-input name="username" type="text" v-model="loginForm.username" />
           </el-form-item>
 
@@ -97,7 +100,47 @@ $blue: rgb(98, 138, 233);
   }
 }
 
-.el-input {
-  width: 260px;
+.login-form {
+  box-sizing: border-box;
+  @include wh(100%, 100%);
+  padding: 0 50px;
 }
+
+.el-input {
+  display: inline-block;
+  width: 200px;
+
+  input.el-input__inner {
+    background: transparent;
+    border: 0px;
+    -webkit-appearance: none;
+    border-radius: 0px;
+  }
+  -webkit-appearance: none;
+  border-radius: 0px;
+}
+
+.el-form-item {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.svg-container {
+  display: inline-block;
+  @include wh(20px, 20px); // padding: 6px 5px 6px 15px;
+  // color: #889aa4;
+  // vertical-align: middle;
+  // width: 30px;
+  // display: inline-block;
+  img {
+    @include wh(20px, 20px);
+  }
+}
+
+// .svg-container {
+//   color: #889aa4;
+// }
+// .svg-container.svg-container_login {
+//   font-size: 20px;
+// }
 </style>

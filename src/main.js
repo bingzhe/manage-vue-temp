@@ -6,6 +6,7 @@ import 'element-ui/lib/theme-default/index.css'
 import locale from 'element-ui/lib/locale/lang/en'
 import App from './App'
 import router from './router'
+import './icons' // icon
 
 Vue.use(ElementUI, { locale })
 
@@ -13,8 +14,8 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  template: '<App/>',
-  components: { App }
+    el: '#app',
+    router,
+    template: '<App/>',
+    components: { App }
 })
