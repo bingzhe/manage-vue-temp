@@ -14,7 +14,7 @@
 
     <el-menu mode="vertical">
         <section v-for="item in routes">
-            <router-link v-if="!item.hidden&&item.noDropdown&&item.children.length>0" :to="item.path='/'+item.children[0].path">
+            <router-link v-if="!item.hidden&&item.noDropdown&&item.children.length>0" :to="item.path+ '/'+item.children[0].path">
                     <el-menu-item :index="item.path+'/'+item.children[0].path">
                         <i class="el-icon-menu"></i>{{item.name}}
                     </el-menu-item>
@@ -101,7 +101,7 @@ export default {
                 noDropdown: true,
                 children: [{path: 'index',/*component: _import(''),*/}]
             },{
-                paht: '/user',
+                path: '/user',
                 //component: Layout,
                 name: '用户管理',
                 icon: 'usericon',

@@ -1,17 +1,20 @@
 <template>
     <div class="app-wrapper">
-        <div class="sidebar-wrapper">
-            <sidebar class="sidebar-container"></sidebar>
-        </div>
+        <sidebar class="sidebar-container"></sidebar>
+        <div class="main-container">
+			<app-main></app-main>
+		</div>
     </div>
 </template>
 
 <script>
 import Sidebar from './Sidebar'
+import AppMain from './AppMain'
 
 export default {
     components: {
-        Sidebar
+        Sidebar,
+        AppMain
     }
 }
 </script>
@@ -24,7 +27,7 @@ export default {
     position: relative;
     @include wh(100%, 100%);
 
-    .sidebar-wrapper {
+    .sidebar-container {
         width: 220px;
         position: fixed;
         top: 0;
@@ -34,6 +37,12 @@ export default {
         overflow-y: auto;
         transition: all .28s ease-out;
     }
+
+    .main-container {
+        min-height: 100%;
+        transition: margin-left 0.28s ease-out;
+        margin-left: 220px;
+	}
 }
 </style>
 
