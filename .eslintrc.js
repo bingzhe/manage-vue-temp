@@ -8,6 +8,7 @@ module.exports = {
         browser: true,
         node: true,
         es6: true,
+        jquery: true
     },
     extends: 'eslint:recommended',
     // required to lint *.vue files
@@ -48,7 +49,7 @@ module.exports = {
         //   'new-parens': 2,
         //   'no-array-constructor': 2,
         //   'no-caller': 2,
-        //   'no-console': 'off',
+          'no-console': 'off',
         //   'no-class-assign': 2,
         //   'no-cond-assign': 2,
         //   'no-const-assign': 2,
