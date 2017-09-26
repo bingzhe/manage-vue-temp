@@ -1,4 +1,17 @@
 <template>
+    <div id="sidebar">
+        <div class="sl-icon">
+            <img src="" />
+        </div>
+        <div class="shop-info">
+            <div class="shop-icon">
+                <img src="" />
+            </div>
+            <h2 class="shop-name">
+                {{ shopName }}
+            </h2>
+        </div>
+
     <el-menu mode="vertical">
         <section v-for="item in routes">
             <router-link v-if="!item.hidden&&item.noDropdown&&item.children.length>0" :to="item.path='/'+item.children[0].path">
@@ -22,12 +35,14 @@
             </el-submenu>
         </section>
     </el-menu>
+    </div>
 </template>
 
 <script>
 export default {
     data() {
         return {
+            shopName: '毛毛快餐',
             routes: [{
                 path: '/',
                 //component: Layout,
@@ -98,8 +113,29 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+@import 'src/styles/mixin.scss';
 
+.sl-icon{
+    height: 55px;
+}
+
+.shop-info{
+    height: 160px;
+    border: 1px solid #ccc;
+}
+
+
+</style>
+
+<style lang="scss">
+//覆盖element-ui默认样式
+
+#sidebar{
+    .el-menu-item{
+        background-color: #fff;
+    }
+}
 </style>
 
 

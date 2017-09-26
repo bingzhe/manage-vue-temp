@@ -25,13 +25,13 @@ export default {
     @include wh(100%, 100%);
 
     .sidebar-wrapper {
-        width: 180px;
+        width: 220px;
         position: fixed;
         top: 0;
         bottom: 0;
         left: 0;
         z-index: 1001;
-        overflow: hidden;
+        overflow-y: auto;
         transition: all .28s ease-out;
     }
 }
