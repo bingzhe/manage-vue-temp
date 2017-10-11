@@ -50,7 +50,7 @@ export default {
   methods: {
     // 判断是否是无效的空值
     isEmpty(value) {
-      var comparable = [null, 'undefined', undefined, 'N/A', '0', 0, 'null', [], {}]
+      var comparable = [null, 'undefined', undefined, 'N/A', '0', 0, 'null']
       return !(comparable.indexOf(value) > 0)
     }
     //   //使用场景
