@@ -15,12 +15,16 @@ import Printer from '@/modules/printer/view'
 import User from '@/modules/user/view'
 // layout
 import Layout from '@/modules/layout/view/layout'
+import Login from '@/views/login'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [{
-    path: '/',
+    path: '/login',
+    component: Login
+  }, {
+    path: '/dashboard',
     component: Layout,
     name: '首页',
     redirect: '/dashboard',
@@ -34,8 +38,8 @@ export default new Router({
     name: '店铺管理',
     icon: 'shopicon',
     children: [
-      { path: 'shopinfo',component: Shopinfo,/*component: _import(''),*/ name: '店铺信息' },
-      { path: 'staff',component: Staff,/*component: _import(''),*/ name: '员工管理' },
+      { path: 'shopinfo', component: Shopinfo,/*component: _import(''),*/ name: '店铺信息' },
+      { path: 'staff', component: Staff,/*component: _import(''),*/ name: '员工管理' },
     ]
   }, {
     path: '/merchandise',
@@ -44,10 +48,10 @@ export default new Router({
     name: '商品管理',
     icon: 'merchandiseicon',
     children: [
-      { path: 'good',component: Good,/*component: _import(''),*/ name: '商品管理' },
-      { path: 'order',component: Order,/*component: _import(''),*/ name: '订单管理' },
-      { path: 'menu',component: Menu,/*component: _import(''),*/ name: '菜单管理' },
-      { path: 'sale',component: Sale,/*component: _import(''),*/ name: '促销管理' },
+      { path: 'good', component: Good,/*component: _import(''),*/ name: '商品管理' },
+      { path: 'order', component: Order,/*component: _import(''),*/ name: '订单管理' },
+      { path: 'menu', component: Menu,/*component: _import(''),*/ name: '菜单管理' },
+      { path: 'sale', component: Sale,/*component: _import(''),*/ name: '促销管理' },
     ]
   }, {
     path: '/advance',
@@ -56,8 +60,8 @@ export default new Router({
     name: '预定管理',
     icon: 'advanceicon',
     children: [
-      { path: 'index',component: Advance,/*component: _import(''),*/ name: '预定管理' },
-      { path: 'set',component: AdvanceSet,/*component: _import(''),*/ name: '预定设置' },
+      { path: 'index', component: Advance,/*component: _import(''),*/ name: '预定管理' },
+      { path: 'set', component: AdvanceSet,/*component: _import(''),*/ name: '预定设置' },
     ]
   }, {
     path: '/table',
@@ -66,7 +70,7 @@ export default new Router({
     name: '餐桌管理',
     icon: 'tableicon',
     children: [
-      { path: 'index',component: Table,/*component: _import(''),*/ name: '餐桌监控' },
+      { path: 'index', component: Table,/*component: _import(''),*/ name: '餐桌监控' },
       { path: 'set', component: TableSet,/*component: _import(''),*/ name: '餐桌设置' },
     ]
   }, {
@@ -75,13 +79,13 @@ export default new Router({
     name: '打印机管理',
     icon: 'printericon',
     noDropdown: true,
-    children: [{ path: 'index',component:Printer,/*component: _import(''),*/ }]
+    children: [{ path: 'index', component: Printer,/*component: _import(''),*/ }]
   }, {
     path: '/user',
     component: Layout,
     name: '用户管理',
     icon: 'usericon',
     noDropdown: true,
-    children: [{ path: 'index',component:User/*component: _import(''),*/ }]
+    children: [{ path: 'index', component: User/*component: _import(''),*/ }]
   }]
 })
