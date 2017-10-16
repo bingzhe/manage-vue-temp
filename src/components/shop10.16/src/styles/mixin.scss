@@ -1,0 +1,65 @@
+@mixin scrollBar{
+    &::-webkit-scrollbar-track-piece {
+        background: #d3dce6;
+    }
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: #99a9bf;
+        border-radius: 20px;
+    }
+}
+
+// 浮动
+.left {
+    float: left;
+}
+   
+.right {
+    float: right;
+}
+   
+// 清除浮动
+.clearfix:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+
+
+//宽高
+@mixin wh($width, $height){
+    width: $width;
+    height: $height;
+}
+
+// 字体大小,颜色
+@mixin fc($size, $color){
+    font-size: $size;
+    color: $color;
+}
+
+//上左偏移
+@mixin tl($top, $left){
+    top: $top;
+    left: $left;
+}
+//公用颜色，字体
+$blue: #5A8CFF;
+
+$grey:#666666;
+
+$black:#151515; 
+
+$green:#7ED321;
+
+$or:#F67F54;
+
+$rd:#E7487E;
+
+$blueA: #4877E7;
+
+$sizes:14px;
+   

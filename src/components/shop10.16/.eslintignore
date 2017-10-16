@@ -1,0 +1,4 @@
+build/*.js
+config/*.js
+src/config/jsencrypt.js
+src/config/encrypt.js
