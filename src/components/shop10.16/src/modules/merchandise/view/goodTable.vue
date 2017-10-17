@@ -137,7 +137,7 @@
 
 <script>
 import { SaleStatus } from "@/config/cfg";
-import { getTableList, getTableCategory} from '../api';
+import { getTableList, getTableCategory } from '../api';
 import { GoodList } from '../index.js';
 
 export default {
@@ -169,6 +169,17 @@ export default {
             multipleSelection: [],  //存放多选选中数据
         };
     },
+    computed: {
+        selectCategoryId() {
+            return this.$store.state.good.selectCategoryId;
+        }
+    },
+    watch: {
+        selectCategoryId: function(val) {
+            // console.log(val);
+            this.getListById(val);
+        }
+    },
     created() {
         this.getList();
         //<<<<<<<<<<<<<<<<<<<<<
@@ -190,6 +201,14 @@ export default {
             } else {
                 console.log("错误! ");
             }
+        },
+        //id拉取
+        getListById(id) {
+            let data = {
+                foodlist: 1,
+                category_id: id,
+            };
+            getTableList(data, this.tableHander);
         },
         //搜索拉取列表
         serchGetList() {

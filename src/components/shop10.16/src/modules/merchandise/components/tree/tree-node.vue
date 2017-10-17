@@ -6,8 +6,8 @@
                     <input type="text" v-model="item.category_name" @blur="isHideEditor(item)" @keyup.enter="isHideEditor(item)">
                 </div>
             </div>
-            <div v-show="!item.canEditor" class="name-content">
-                <div class="category-name" @click="handleNode(item)">
+            <div v-show="!item.canEditor" class="name-content" @mouseleave="isHideBtn(item)">
+                <div class="category-name" @click="handleNode(item)" @mouseenter="isShowBtn(item)" :class="{'tree-category': item.isThree, 'active': item.isActive }">
                     <!-- //<<<<<<<<<<<<<<<  图标预留未知-->
                     <!-- <span></span> -->
                     <!-- <span></span> -->
@@ -17,10 +17,10 @@
                         {{ item.category_name }}
                     </span>
                 </div>
-                <div class="operate-btn">
+                <div v-if="item.isShowBtn" class="operate-btn">
                     <i v-if="item.addIcon" class="iconfont icon-tianjia blue" @click="addCategory(item)"></i>
                     <i v-if="item.editorIcon" class="iconfont icon-bianji blue" @click="isShowEditor(item)"></i>
-                    <i v-if="item.deleteIcon" class="iconfont icon-shanchu red"></i>
+                    <i v-if="item.deleteIcon" class="iconfont icon-shanchu red" @click="deleteCategory(item)"></i>
                 </div>
             </div>
             <tree-node ref="treenode" v-if="item.list && item.list.length > 0" :tree-data="item.list"></tree-node>
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { Tree } from './tree';
+
 export default {
     name: 'treeNode',
     props: {
@@ -36,7 +38,7 @@ export default {
     },
     data() {
         return {
-            nodeData: []
+            nodeData: [],
         };
     },
     created() {
@@ -55,19 +57,27 @@ export default {
     },
     methods: {
         handleNode(node) {
-            //<<<<<<<<<<<<<<< 
+            node.isActive = true;
             this.tree.$emit('node-click', node);
         },
-        addCategory(node){
+        addCategory(node) {
             this.tree.$emit('add-category', node);
         },
+        // isShowEditor(node) {
+        //     node.canEditor = true;
+        // },
         isShowEditor(node) {
-            node.canEditor = true;
-        },
-        isHideEditor(node) {
             this.tree.$emit('editor-category', node);
-            node.canEditor = false;
-        }
+        },
+        deleteCategory(node) {
+            this.tree.$emit('delete-category', node);
+        },
+        isShowBtn(node) {
+            node.isShowBtn = true;
+        },
+        isHideBtn(node) {
+            node.isShowBtn = false;
+        },
     }
 };
 </script>
@@ -111,6 +121,12 @@ export default {
     text-align: center;
     vertical-align: bottom;
     cursor: pointer;
+}
+
+.category-name.active {
+    border-color: #4877e7;
+    color: #fff;
+    background-color: #4877e7;
 }
 
 .operate-btn {
@@ -186,6 +202,12 @@ export default {
 
 .red {
     color: #E7487E;
+}
+
+.tree-category {
+    @include wh(185px, 34px);
+    text-align: left;
+    padding-left: 10px;
 }
 </style>
 

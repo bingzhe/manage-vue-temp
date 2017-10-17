@@ -6,6 +6,7 @@ import 'element-ui/lib/theme-default/index.css';
 import locale from 'element-ui/lib/locale/lang/zh-CN';
 import App from './App';
 import router from './router';
+import store from './store';
 import '@/assets/font/iconfont.css';
 import '@/config/utilPageStore';
 import { Util } from '@/config/util.js';
@@ -19,6 +20,7 @@ Util.creatKey();
 new Vue({
     el: '#app',
     router,
+    store,
     template: '<App/>',
     components: { App }
 });

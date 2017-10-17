@@ -66,6 +66,7 @@
 <script>
 	import { saveShopinfo } from '../../../api';
 	import { getShopinfo } from '../../../api';
+	import { ls } from '@/config/pageStore';
 	export default {
 
 		data() {
@@ -83,20 +84,8 @@
 			};
 		},
 		created(){
-			let _this = this;
-			getShopinfo({
-				userid:1, //临时数据
-				get_shopinfo_base:1
-			},function(resp){
-				_this.shopinfo = resp.data.shopinfo;
-				_this.form.shop_name = _this.shopinfo.shop_name;
-				_this.form.contact = _this.shopinfo.contact;
-				_this.form.shop_area = _this.shopinfo.shop_area;
-				_this.form.address = _this.shopinfo.address;
-				_this.form.address_num = _this.shopinfo.address_num;
-				_this.imageUrl = _this.shopinfo.shop_logo;
-			});
 			
+			this.getData();
 		},
 		methods: {
 			handleAvatarSuccess(res, file) {
@@ -115,10 +104,11 @@
 				return isJPG && isLt1M;
 			},
 			onSubmit() {
-
+				let id = ls.getItem("public#shopinfo");
+				let userID = id.userinfo.userid;
 				let data = {
 					shopinfo_save: 1,
-					userid:1, //临时数据
+					userid:userID,
 					shop_initname: '毛毛快餐',
 					shop_name: this.form.shop_name,
 					contact: this.form.contact,
@@ -137,12 +127,28 @@
 			},
 			goBack(){
 				this.$router.push({ path: '/shop' });
-			}
-
+			},
+			getData(){
+				let id = ls.getItem("public#shopinfo");
+				let userID = id.userinfo.userid;
+				let _this = this;
+				getShopinfo({
+					userid: userID,
+					get_shopinfo_base: 1
+				}, function(resp) {
+					_this.shopinfo = resp.data.shopinfo;
+					_this.form.shop_name = _this.shopinfo.shop_name;
+					_this.form.contact = _this.shopinfo.contact;
+					_this.form.shop_area = _this.shopinfo.shop_area;
+					_this.form.address = _this.shopinfo.address;
+					_this.form.address_num = _this.shopinfo.address_num;
+					_this.imageUrl = _this.shopinfo.shop_logo;
+				});
 		}
 
-	};
-</script>
+}
+
+};</script>
 
 <style lang="scss" scoped>
 	@import 'src/styles/mixin.scss';

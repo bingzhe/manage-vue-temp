@@ -63,13 +63,17 @@
 			},
 			selectTag(tag,index,event) {
 				$(event).toggleClass("selected")
-				this.value = tag
+				this.value = tag;
+				localStorage.setItem("tagArr",this.addTags)
 			}
 		},
 		created() {
 			if(this.history){
 				this.value=this.history
 				this.addTags.push(this.value);
+			}else{
+				this.addTags=localStorage.getItem("tagArr");
+				
 			}
 			
 		},

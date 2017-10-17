@@ -134,6 +134,7 @@
 	import { getShopinfo } from '../../../api';
 	import { Util } from '@/config/util';
 	import { Invoce } from '@/config/cfg';
+	import { ls } from '@/config/pageStore';
 	export default {
 		data() {
 			return {
@@ -201,7 +202,7 @@
 						idx: 3
 					}
 				],
-				checkboxGroup6: [],
+				checkboxGroup6:[],
 				paper: [{
 						text: '增值税普通发票',
 						idx: 1
@@ -233,37 +234,7 @@
 			};
 		},
 		created() {
-			let _this = this;
-			let t = new Date();
-			let year = t.getFullYear();
-			let mon = t.getMonth()+1;
-			let dats = t.getDate();
-		getShopinfo({
-				userid: 1, //临时数据
-				get_shopinfo_edit: 1
-			}, function(resp) {
-				_this.shopsystem = resp.data.shopinfo;
-				console.log(_this.shopsystem)
-				_this.Zindex = _this.shopsystem.suspend;
-				_this.show = _this.shopsystem.is_invoice_vat;
-				_this.checkboxGroup1 = _this.shopsystem.shop_pay_way;
-				_this.checkboxGroup2 = _this.shopsystem.pay_time;
-				_this.checkboxGroup3 = _this.shopsystem.sale_way;
-				_this.checkboxGroup4 = _this.shopsystem.shop_label;
-				_this.times = _this.shopsystem.open_time;
-				_this.remark = _this.shopsystem.invoice_remark;
-				_this.show = _this.shopsystem.is_invoice_vat[0].is_invoice;
-						let arr = Tranobj(_this.times[0]).split(',');
-						 let hour = arr[0];
-						 let min = arr[1];
-						 let second = arr[2];
-				_this.value2 = new Date(year,mon,dats,hour,min,second);
-						let arr2 = Tranobj(_this.times[1]).split(',');
-						 let hours = arr2[0];
-						 let mins = arr2[1];
-						 let secons = arr2[2];
-				_this.value3 = new Date(year,mon,dats,hours,mins,secons);
-			})
+			this.getData();
 		},
 		mounted() {
 
@@ -281,17 +252,20 @@
 				this.Zindex = index;
 			},
 			save() {
+				let id = ls.getItem("public#shopinfo");
+				let userID = id.userinfo.userid;
 				let time1 = Subtime(this.value2);
 				let time2 = Subtime(this.value3);
+				this.times = [];
 				this.times.push(time1, time2);
 				let data = {
 					shopinfo_save: 1,
-					userid: 1, //临时数据
+					userid:userID,
 					suspend: this.Zindex,
 					is_invoice_vat:[
 									{
-										'is_invoice':!this.show,
-										'"invoice_type':[this.showinvos,this.checkboxGroup6,this.showinvs]
+										'is_invoice':this.show,
+										'invoice_type':[this.checkboxGroup6,this.showinvs]
 									}
 								],
 					shop_pay_way: this.checkboxGroup1,
@@ -299,11 +273,43 @@
 					sale_way: this.checkboxGroup3,
 					shop_label: this.checkboxGroup4,
 					open_time: this.times,
-					invoice_remark: this.remark,
-					opening_time:[]
+					invoice_remark: this.remark
 				};
 				shopSeting(data, this.alts);
-				console.log(this.type)
+			},
+			getData(){
+				let id = ls.getItem("public#shopinfo");
+				let userID = id.userinfo.userid;
+				let _this = this;
+				let t = new Date();
+				let year = t.getFullYear();
+				let mon = t.getMonth()+1;
+				let dats = t.getDate();
+				getShopinfo({
+				userid:userID, 
+				get_shopinfo_edit: 1
+				}, function(resp) {
+						_this.shopsystem = resp.data.shopinfo;
+						_this.Zindex = _this.shopsystem.suspend;
+						_this.show = _this.shopsystem.is_invoice_vat;
+						_this.checkboxGroup1 = _this.shopsystem.shop_pay_way;
+						_this.checkboxGroup2 = _this.shopsystem.pay_time;
+						_this.checkboxGroup3 = _this.shopsystem.sale_way;
+						_this.checkboxGroup4 = _this.shopsystem.shop_label;
+						_this.times = _this.shopsystem.open_time;
+						_this.remark = _this.shopsystem.invoice_remark;
+						_this.show = _this.shopsystem.is_invoice_vat[0].is_invoice;
+						let arr = Tranobj(_this.times[0]).split(',');
+						let hour = arr[0];
+						let min = arr[1];
+						let second = arr[2];
+						_this.value2 = new Date(year,mon,dats,hour,min,second);
+						let arr2 = Tranobj(_this.times[1]).split(',');
+						let hours = arr2[0];
+						let mins = arr2[1];
+						let secons = arr2[2];
+						_this.value3 = new Date(year,mon,dats,hours,mins,secons);
+				});
 			},
 			alts(resp) {
 				if(resp.ret === 0) {
@@ -322,6 +328,7 @@
 			showInvos(){
 				if(this.showinvos===0){
 					this.showinvos=1;
+					this.show = 1
 				}else{
 					this.showinvos=0;
 				}
@@ -443,7 +450,7 @@
 		.bottom {
 			width: 100%;
 			text-align: center;
-			margin-bottom: 30px;
+			padding-bottom: 50px;
 			margin-left: 280px;
 			.blue {
 				@include fc(16px, #ffffff);

@@ -1,4 +1,5 @@
 import { Util }from '@/config/util';
+import {chooseAll} from '@/config/cfg'
 import Vue from 'vue';
 export const apiMethods ={
 	//获取餐桌列表
@@ -43,25 +44,31 @@ export const apiMethods ={
   		var list=[];
   		var searchRegex1 = new RegExp(value1,"g");
   		var searchRegex2 = new RegExp(value2,"g");
-  		for(var i =0;i<dataList.length;i++){
+  		if(value1=value2==chooseAll.code[0]){
+  			list=dataList;
+  			return list;
+  		}else{
+  			for(var i =0;i<dataList.length;i++){
 			if(searchRegex1.exec(dataList[i].seat_id)!=null&&searchRegex2.exec(dataList[i].seat_name)!=null){
 				list.push(dataList[i])
 			}
 		}
   		return list;
+  		}
+  		
   	},
-  		//获取总的条目数
-		getTotal:function(testList) {
-				 var tot = 1;
-			    for (var i =0 ;i<testList.length;i++){
-			    	tot++;
-			    }
-			     this.total = tot;
-			     return this.total;
-			},
-		//获取每页显示的相对应条目的内容
-		getPageList:function(testList,limit,page){
-//			console.log(testList)
-			testList.filter((item, index) => index <limit * page && index >= limit * (page - 1))
-		}
+	//获取总的条目数
+	getTotal:function(testList) {
+			 var tot = 1;
+		    for (var i =0 ;i<testList.length;i++){
+		    	tot++;
+		    }
+		     this.total = tot;
+		     return this.total;
+	},
+	//获取每页显示的相对应条目的内容
+	getPageList:function(testList,limit,page) {
+		testList.filter((item, index) => index <limit * page && index >= limit * (page - 1))
+	},
+	
 }

@@ -21,14 +21,14 @@
 					<div class="content left">
 						<p class="user grey">账号：<span class="black">{{shopinfo.username}}</span><span class="changePassword bl rfs" @click="showPsd">修改密码</span></p>
 						<p class="contactspanerson grey">联系人：<span class="black">{{shopinfo.contact}}</span></p>
-						<p class="spanhone grey">电话：<span v-if="shopinfo.telephone" class="call nobind lfs">{{shopinfo.telephone}}</span><span v-else class="call nobind">( 未绑定 )</span><span class="unbundling bl rfs" @click='showPhone' v-if='!shopinfo.telephone'>绑定</span><span v-else class="unbundling bl rfs" @click='showPhone' >解绑</span></p>
+						<p class="spanhone grey">电话：<span v-if="shopinfo.telephone" class="call nobind lfs">{{shopinfo.telephone}}</span><span v-else class="call nobind">( 未绑定 )</span><span class="unbundling bl rfs" @click='showPhone' v-if='!shopinfo.telephone'>绑定</span><span v-else class="unbundling bl rfs" @click='showbindPhone' >解绑</span></p>
 						<p class="weChat grey">微信：<span class="bund nobind lfs" v-if='!shopinfo.is_weixin'>( 未绑定 )</span><span v-else class="bund gr lfs">( 已绑定 )</span><span class="unbundling bl rfs " @click='showWechat' v-if='!shopinfo.is_weixin'>绑定</span><span v-else class="unbundling bl rfs " @click='showWechat'>解绑</span></p>
 					</div>
 				</div>
 			</div>
 			<div class="content left rf">
 					<p class="shopId grey">店铺ID：<span class="black">{{shopinfo.shop_id}}</span></p>
-					<p class="email grey">邮箱：<span class="nobind">{{shopinfo.email}}</span><span v-if='!shopinfo.email' class="unbundling bl rfs" @click='showEmail'>绑定</span><span v-else class="unbundling bl rfs" @click='showEmail'>解绑</span> </p>
+					<p class="email grey">邮箱：<span class="nobind">{{shopinfo.email}}</span><span v-if='!shopinfo.email' class="unbundling bl rfs" @click='showEmail'>绑定</span><span v-else class="unbundling bl rfs" @click='showBind'>解绑</span> </p>
 					<p class="area grey">面积：<span class="black">{{shopinfo.shop_area}}M²</span></p>
 					<p class="address grey">地址：<span class="black">{{shopinfo.address}}</span></p>
 			</div>
@@ -50,11 +50,8 @@
 					<p class="legalpersonNum grey">企业法人身份证号码:<span class="black">{{shopsbusiness.legal_card}}</span>  <span class="unbundling nobind">(未认证)</span></p>
 					<p class="legalpersonCard grey">法人身份证件：<span class="nobind">(未认证)</span></p>
 					<div class="photos">
-						<div class="dentificationCard">
-							<img :src="imgbase_url + '/img_get.php?img=1&height=69&width=69&imgname=' + shopsbusiness.legal_card_photo" alt="" />
-						</div>
-						<div class="dentificationCard">
-							<!--<img :src="imgbase_url + '/img_get.php?img=1&height=69&width=69&imgname=' + shopsbusiness.legal_card_photo" alt="" />-->
+						<div class="dentificationCard" v-for='item in shopsbusiness.legal_card_photo'>
+							<img :src="imgbase_url + '/img_get.php?img=1&height=69&width=69&imgname=' + item" alt="" />
 						</div>
 					</div>
 
@@ -64,10 +61,14 @@
 					<p class="businessLicense grey">营业执照注册号：<span class="black">{{shopsbusiness.business_num}}</span> <span class="or nobind">(未认证)</span></p>
 					<p class="businessTerm grey">营业期限：<span class="black" v-for='(item,index) in dates'>{{item}} <i v-if="index < dates.length - 1" >至 </i> </span> <span class="unbundling or nobind">(未认证)</span> </p>
 					<p class="scanning grey">营业执照扫描件：<span class="or nobind">(未认证)</span></p>
-					<div class="dentificationCard"></div>
+					<div class="dentificationCard">
+						<img :src="imgbase_url + '/img_get.php?img=1&height=69&width=69&imgname=' + shopsbusiness.business_photo" alt="" />
+					</div>
 					<p class="permit grey">餐饮服务许可证编号: <span class="black">{{shopsbusiness.repast_permit_identity}}餐证字 ({{shopsbusiness.repast_permit_year}}) 第{{shopsbusiness.repast_permit_num}}号</span> <span class="or nobind">(未认证)</span></p>
 					<p class="scanningPermit grey">餐饮服务许可证扫描件：<span class="or nobind">(未认证)</span></p>
-					<div class="dentificationCard noTop"></div>
+					<div class="dentificationCard noTop">
+						<img :src="imgbase_url + '/img_get.php?img=1&height=69&width=69&imgname=' + shopsbusiness.repast_permit_photo" alt="" />
+					</div>
 				</div>
 			</div>
 		</section>
@@ -87,7 +88,7 @@
 					<p class="orderSystem grey">点餐系统：<span class="black">{{system[shopsystem.suspend]}}</span></p>
 					<p class="modeofPayment grey">启用支付方式：<span class="black" v-for='(item,index) in shopsystem.shop_pay_way'>{{pay[item]}}<i v-if="index < shopsystem.shop_pay_way.length - 1">、</i></span></p>
 					<p class="timeofPayment">付款时机: <span class="black" v-for='(item,index) in shopsystem.pay_time'>{{paytime[item]}}<i v-if="index < shopsystem.pay_time.length - 1">、</i></span></p>
-					<p class="invoice">发票：<span class="black" v-for='item in shopsystem.is_invoice_vat'>{{item}}</span></p>
+					<p class="invoice">发票：<span class="black" v-for='item in shopsystem.is_invoice_vat'>{{invos[item.is_invoice]}}</span></p>
 				</div>
 				<div class="content left rf">
 					<p class="salesWay grey">销售方式：<span class="black" v-for='(item,index) in shopsystem.sale_way'>{{sale[item]}}<i v-if="index < shopsystem.sale_way.length - 1">、</i></span></p>
@@ -127,18 +128,20 @@
 		<div class="dialog" v-show="showWindow">
 			<div class="titles blue">
 				<span v-if="showPwd">修改密码</span>
-				<span v-else-if="showCall">绑定手机号</span>
+				<span v-else-if="showCallok">绑定手机号</span>
+				<span v-else-if="showbind">解绑邮箱</span>
+				<span v-else-if='showBindPhone'>解绑手机号</span>
 				<span v-else-if='showEmail'>绑定邮箱</span>
 			</div>
 			<el-form label-width="180px" v-if='showPwd'>
 				<el-form-item  label="原密码">
-					<el-input placeholder='请输入旧密码' v-model='form.old_password'></el-input>
+					<el-input placeholder='请输入旧密码' type='password' v-model='form.old_password'></el-input>
 				</el-form-item>
 				<el-form-item  label="新密码">
-					<el-input placeholder='请输入新密码' v-model='form.new_password'></el-input>
+					<el-input placeholder='请输入新密码' type='password' v-model='form.new_password'></el-input>
 				</el-form-item>
 				<el-form-item  label="新密码确定">
-					<el-input placeholder='再次输入新密码' v-model='form.new_password_again'></el-input>
+					<el-input placeholder='再次输入新密码' type='password' v-model='form.new_password_again'></el-input>
 				</el-form-item>
 			</el-form>
 			<el-form label-width="180px" v-else-if='showCall'>
@@ -149,7 +152,8 @@
 					<span class="confimIcon left"></span>
 				</el-form-item>
 				<el-form-item style='position: relative;' label="手机号" >
-					<el-input placeholder='输入手机号码'></el-input>
+					<el-input placeholder='输入手机号码' v-show='showCallok'></el-input>
+					<span class="black">{{shopinfo.telephone}}</span>
 					<span class="rew">获取验证码</span>
 				</el-form-item>
 				<el-form-item label="短信验证码">
@@ -158,12 +162,14 @@
 			</el-form>
 			<el-form label-width='180px' v-else-if='showEmail'>
 				<el-form-item label='邮箱'>
-					<el-input placeholder='输入邮箱账号'></el-input>
+					<el-input placeholder='输入邮箱账号' v-show='showEml'></el-input>
+					<span class="nobind">{{shopinfo.email}}</span>
 				</el-form-item>
 			</el-form>
 			<div class="dialog-footer">
 				<button class="primary" @click='show' v-if='showPwd'>确定</button>
-				<button class="primary" @click='show' v-else='showCall'>绑定</button>
+				<button class="primary" @click='show' v-else-if='showCall'>绑定</button>
+				<button class="primary" @click='show' v-else-if='showbind'>解绑</button>
 				<button class="default" @click="hidePsd">取消</button>
 			</div>
 		</div>
@@ -200,6 +206,7 @@
 	import { Dinnertime } from '@/config/cfg';
 	import { Certificationstatus } from '@/config/cfg';
 	import { Util } from '@/config/util';
+	import { ls } from '@/config/pageStore';
 	export default {
 		data(){
 			return{
@@ -208,9 +215,12 @@
 				showError:false,
 				showOk:false,
 				showCall:false,
+				showCallok:false,
+				showbind:false,
 				showPwd:false,
 				showWhat:false,
 				showEml:false,
+				showBindPhone:false,
 				shopinfo:{},
 				shopsystem:{},
 				shopsbusiness:{},
@@ -230,41 +240,7 @@
 			};
 		},
 		created(){
-			
-			let _this = this;
-			getShopinfo({
-				userid:1,  //临时数据
-				get_shopinfo_base:1
-			},function(resp){
-				_this.shopinfo = resp.data.shopinfo;
-				_this.imageUrl = _this.shopinfo.shop_logo;
-				
-			});
-			getShopinfo({
-				userid:1, //临时数据
-				get_shopinfo_edit:1
-			},function(resp){
-				_this.shopsystem = resp.data.shopinfo;
-				_this.system = Startsystem.code;
-				_this.pay = Payway.code;
-				_this.paytime = Paytime.code;
-				_this.sale = Saleway.code;
-				_this.invos = Invoce.code;
-			});
-			getShopinfo({
-				userid:1,  //临时数据
-				get_shop_business:1,	
-			},function(resp){
-				_this.shopsbusiness = resp.data.shopsbusiness
-				let time1 = _this.shopsbusiness.business_date.slice(1,length-1);
-				let arr = time1.split(',');
-				let time2 = arr[0];
-				let time3 = arr[1];
-				let stime = Util.TimeTo(time2,'yyyy-MM-dd');
-				let etime = Util.TimeTo(time3,'yyyy-MM-dd');
-				_this.dates.push(stime,etime);
-				console.log(_this.shopsbusiness)
-			});
+			this.getData();
 		},
 		computed:{
 			Startsystem(){
@@ -298,8 +274,6 @@
 				this.showOk = false;
 			},
 			show(){
-//				this.showWindow = false;
-//				this.showWhat = false;
 				let data = {
 					save_password:1,
 					userid:1, // 临时数据
@@ -320,6 +294,7 @@
 				this.showDialog = true;
 				this.showWindow = true;
 				this.showCall = true;
+				this.showCallok = true;
 				this.showPwd = false;
 			},
 			showWechat(){
@@ -334,6 +309,58 @@
 				this.showDialog = true;
 				this.showPwd = false;
 				this.showEml = true;
+			},
+			showBind(){
+				this.showWindow = true;
+				this.showDialog = true;
+				this.showPwd = false;
+				this.showbind = true;
+			},
+			showbindPhone(){
+				this.showDialog = true;
+				this.showWindow = true;
+				this.showCall = true;
+				this.showBindPhone = true;
+				this.showPwd = false;
+//				this.showbind = true;
+			},
+			getData(){
+				let id = ls.getItem("public#shopinfo");
+			let userID = id.userinfo.userid;
+			let _this = this;
+			getShopinfo({
+				userid:userID,
+				get_shopinfo_base:1
+			},function(resp){
+				_this.shopinfo = resp.data.shopinfo;
+				_this.imageUrl = _this.shopinfo.shop_logo;
+				
+			});
+			getShopinfo({
+				userid:userID,
+				get_shopinfo_edit:1
+			},function(resp){
+				_this.shopsystem = resp.data.shopinfo;
+				_this.system = Startsystem.code;
+				_this.pay = Payway.code;
+				_this.paytime = Paytime.code;
+				_this.sale = Saleway.code;
+				_this.invos = Invoce.code;
+			});
+			getShopinfo({
+				userid:userID,
+				get_shop_business:1,	
+			},function(resp){
+				_this.shopsbusiness = resp.data.shopsbusiness
+				let time1 = _this.shopsbusiness.business_date.slice(1,length-1);
+				let arr = time1.split(',');
+				let time2 = arr[0];
+				let time3 = arr[1];
+				let stime = Util.TimeTo(time2,'yyyy-MM-dd');
+				let etime = Util.TimeTo(time3,'yyyy-MM-dd');
+				_this.dates.push(stime,etime);
+				console.log(_this.shopsbusiness)
+			});
 			}
 		}
 	};
@@ -482,6 +509,7 @@
 			text-indent: 14px;
 			.info{
 				@include fc($sizes, $grey);
+				padding-bottom: 50px;
 				.code{
 				padding-top:20px;
 			}
@@ -558,6 +586,7 @@
 			line-height: 24px;
 			border-radius: 2px;
 			cursor: pointer;
+			text-align: center;
 		}
 		.dialog-footer{
 			padding:46px 0 50px 0;
@@ -693,5 +722,11 @@
 		.el-form-item{
 			margin-bottom: 20px;
 		}
+		.el-form-item__content {
+    line-height: 36px;
+    position: relative;
+    font-size: 14px;
+    text-align: left;
+	}
 	}
 </style>

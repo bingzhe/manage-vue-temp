@@ -122,6 +122,16 @@ export const GoodList = {
             Vue.set(item, 'addIcon', true);
             Vue.set(item, 'editorIcon', true);
             Vue.set(item, 'deleteIcon', true);
+            Vue.set(item, "isShowBtn", false);
+            Vue.set(item, 'isActive', false);
+
+            let len = this.getKeylength(item.key);
+
+            if (len === 5) {
+                Vue.set(item, 'isThree', true);
+            } else {
+                Vue.set(item, 'isThree', false);
+            }
 
             if (item.hasOwnProperty('list') && item.list.length > 0) {
                 this.initTreeData(item.list);
@@ -180,7 +190,7 @@ export const GoodList = {
             } else if (len === 4) {
                 item.addIcon = true;
                 item.editorIcon = true;
-                item.deleteIcon = false;
+                item.deleteIcon = true;
             } else if (len === 5) {
                 item.addIcon = false;
                 item.editorIcon = true;
@@ -202,6 +212,9 @@ export const GoodList = {
      */
     selectdinnerTime(dinnerTimeData = [], dinnerTimeArr = []) {
         let arr = [];
+        if(dinnerTimeArr == null){
+            return;
+        }
         dinnerTimeData.forEach((item) => {
             let val = item.value;
 
@@ -213,5 +226,39 @@ export const GoodList = {
         });
 
         return arr;
+    },
+
+    /**
+    *添加最顶层商品分类
+    * @param {Array} treeData 
+    * @return {Object}
+    */
+    addCategoryFirst(treeData = []) {
+        let treeDataA = {};
+        Vue.set(treeDataA, 'category_name', '商品');
+        Vue.set(treeDataA, 'list', treeData);
+        Vue.set(treeDataA, 'opening_time', [1, 2, 3, 4]);
+        Vue.set(treeDataA, 'category_id', '0');
+        return treeDataA;
+    },
+
+    /**
+     * 修改选中状态
+     * @param {Object} node  选中节点
+     * @param {Object} treeDataById  所有数据
+      */
+    changeSelecte(node = {}, treeDataById = {}) {
+        let id = node.category_id;
+
+        for (let item in treeDataById) {
+            if (treeDataById.hasOwnProperty(item)) {
+
+                if (id === item) {
+                    treeDataById[item].isActive = true;
+                } else {
+                    treeDataById[item].isActive = false;
+                }
+            }
+        }
     }
 };

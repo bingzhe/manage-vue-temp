@@ -14,23 +14,27 @@
 			<div class="info">
 				<el-form label-width="155px">
 					<el-form-item label="企业名称">
-						<el-input v-model='forms.company_name'></el-input>
+						<el-input v-model='forms.company_name' v-if='show'></el-input>
+						<span class="domain" v-else>{{shopsbusiness.company_name}} <span class="confm">(已认证)</span></span>
 					</el-form-item>
 					<el-form-item label="法人代表">
-						<el-input v-model='forms.legal_person'></el-input>
+						<el-input v-model='forms.legal_person' v-if='show'></el-input>
+						<span class="domain" v-else>{{shopsbusiness.legal_person}} <span class="confm">(已认证)</span></span>
 					</el-form-item>
 					<el-form-item label="法人手机号">
-						<el-input v-model='forms.legal_phone'></el-input>
+						<el-input v-model='forms.legal_phone' v-if='show'></el-input>
+						<span class="domain" v-else>{{shopsbusiness.legal_phone}} <span class="confm">(已认证)</span></span>
 					</el-form-item>
 					<el-form-item label="法人身份证号码">
-						<el-input v-model='forms.legal_card'></el-input>
+						<el-input v-model='forms.legal_card' v-if='show'></el-input>
+						<span class="domain" v-else>{{shopsbusiness.legal_card}} <span class="confm">(已认证)</span></span>
 					</el-form-item>
 					<el-form-item label="法人身份证照片">
 						<div class="main clearfix">
 							<div class="frontFace left" v-for='(item,index) in main'>
-								<h3 class=" titles">{{item.text}}</h3>
+								<h3 class=" titles">{{item.text}} <span class="confm" v-show='!show'>(已认证)</span></h3>
 								<div class="photo1 left">
-									<img :src='item.imgs' alt="" />
+									<img :src="imgbase_url + '/img_get.php?img=1&height=69&width=69&imgname=' + item.imgs" alt="" />
 								</div>
 								<el-upload class="upload-demo" action="http://www.ob.com:8080/php/shopinfo_save.php" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
 									<el-button size="small" type="primary">{{item.upload}}</el-button>
@@ -42,21 +46,24 @@
 						</div>
 					</el-form-item>
 					<el-form-item label="营业执照注册号">
-						<el-input v-model='forms.business_num'></el-input>
+						<el-input v-model='forms.business_num' v-if='show'></el-input>
+						<span class="domain" v-else>{{shopsbusiness.business_num}}</span>
 					</el-form-item>
 					<el-form-item class='dates' label="营业期限">
-						<span class="start"></span><i class="starts">从</i>
-						<el-date-picker class='ipt' type="date" v-model='date1'></el-date-picker>
-						<span class="start1"></span><i class="starts2">至</i>
-						<el-date-picker class='ipt' type="date" v-model='date2'></el-date-picker>
+						<span class="start" v-show='show'></span><i v-show='show' class="starts">从</i>
+						<el-date-picker v-show='show' class='ipt' type="date" v-model='date1'></el-date-picker>
+						<span class="start1" v-show='show'></span><i v-show='show' class="starts2">至</i>
+						<el-date-picker v-show='show' class='ipt' type="date" v-model='date2'></el-date-picker>
+						<span v-show='!show' class="domain" v-for='(item,index) in dat'>{{item}}<i v-if="index < dat.length - 1">&nbsp;&nbsp;&nbsp;&nbsp;至 </i> </span>
 					</el-form-item>
 					<el-form-item label="营业执照扫描件">
 						<div class="busPic left">
-							<img :src="busPic" alt="" />
+							<img :src="imgbase_url + '/img_get.php?img=1&height=69&width=69&imgname=' + shopsbusiness.business_photo" alt="" />
 						</div>
 						<div class="picInfo left">
 							<el-upload class="upload-demo" action="http://www.ob.com:8080/php/shopinfo_save.php" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
 								<el-button size="small" type="primary">上传</el-button>
+								<span class="confm" v-show='!show'>(认证中)</span>
 							</el-upload>
 							<div class="text-warp">
 								<p class="text top">注：支持JPG、JPEG、PNG文件格式，大小不得大于2M</p>
@@ -65,30 +72,32 @@
 					</el-form-item>
 					<el-form :inline="true">
 						<el-form-item class='citys' label='餐饮服务许可证编号'>
-							<el-select v-model="value" placeholder="省份(简称)">
+							<el-select v-model="value" placeholder="省份(简称)" v-if='show'>
 								<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 								</el-option>
 							</el-select>
+							<span class="domain" v-else>{{shopsbusiness.repast_permit_identity}}餐证字 ({{shopsbusiness.repast_permit_year}}) 第{{shopsbusiness.repast_permit_num}}号<span class="or nobind">(未认证)</span></span>
 						</el-form-item>
-						<el-form-item class='citys cit' label='餐证字'>
+						<el-form-item class='citys cit' label='餐证字' v-if='show'>
 							<el-date-picker v-model="value5" align="right" type="year" placeholder="发证年份">
 							</el-date-picker>
 						</el-form-item>
-						<el-form-item class='cityd' label='第'>
+						<el-form-item class='cityd' label='第' v-if='show'>
 							<el-input placeholder='输入行政区域代码及发证顺序编号' v-model='forms.repast_permit_num'></el-input>
 						</el-form-item>
-						<el-form-item label='号'>
+						<el-form-item label='号' v-if='show'>
 
 						</el-form-item>
 					</el-form>
 
 					<el-form-item label="餐饮服务许可证扫描件">
 						<div class="busPic left">
-
+							<img :src="imgbase_url + '/img_get.php?img=1&height=69&width=69&imgname=' + shopsbusiness.repast_permit_photo" alt="" />
 						</div>
 						<div class="picInfo left">
 							<el-upload class="upload-demo" action="https://baidu.com">
 								<el-button size="small" type="primary">上传</el-button>
+								<span class="confm" v-show='!show'>(认证中)</span>
 							</el-upload>
 							<div class="text-warp">
 								<p class="text top">注：支持JPG、JPEG、PNG文件格式，大小不得大于2M</p>
@@ -97,11 +106,12 @@
 					</el-form-item>
 					<el-form-item label="确认书扫描件">
 						<div class="busPic left">
-
+							<img :src="imgbase_url + '/img_get.php?img=1&height=69&width=69&imgname=' + shopsbusiness.confirmation" alt="" />
 						</div>
 						<div class="picInfo left">
 							<el-upload class="upload-demo" action="https://baidu.com">
 								<el-button size="small" type="primary">上传</el-button>
+								<span class="confm" v-show='!show'>(认证失败)</span>
 							</el-upload>
 							<div class="downLoad">
 								下载确认书模板
@@ -112,7 +122,8 @@
 						</div>
 					</el-form-item>
 					<el-form-item label="经营范围">
-						<el-input v-model='forms.business_scope'></el-input>
+						<el-input v-model='forms.business_scope' v-if='show'></el-input>
+						<span class="domain" v-else>{{shopsbusiness.business_scope}}</span>
 					</el-form-item>
 					<div class="bottom">
 						<button class="blue" @click='onSubmit'>提交审核</button>
@@ -127,85 +138,87 @@
 <script>
 	import { saveShopinfo } from '../../../api';
 	import { getShopinfo } from '../../../api';
+	import { ls } from '@/config/pageStore';
+	import { Util } from '@/config/util';
 	export default {
 		data() {
 			return {
 				options: [{
-					value: '京'
-				}, {
-					value: '津'
-				}, {
-					value: '渝'
-				}, {
-					value: '沪'
-				}, {
-					value: '冀'
-				},{
-					value:'晋'
-				},
-				{
-					value:'辽'
-				},
-				{
-					value:'吉'
-				},{
-					
-				},{
-					value:'黑'
-				},{
-					value:'苏'
-				},{
-					value:'浙'
-				},{
-					value:'皖'
-				},{
-					value:'闽'
-				},{
-					value:'赣'
-				},{
-					value:'鲁'
-				},{
-					value:'豫'
-				},{
-					value:'鄂'
-				},{
-					value:'湘'
-				},{
-					value:'粤'
-				},{
-					value:'琼'
-				},{
-					value:'川'
-				},{
-					value:'贵'
-				},{
-					value:'云'
-				},{
-					value:'陕'
-				},{
-					value:'甘'
-				},{
-					value:'青'
-				},{
-					value:'内蒙古'
-				},{
-					value:'桂'
-				},{
-					value:'宁'
-				},{
-					value:'新'
-				},{
-					value:'藏'
-				},{
-					value:'港'
-				},{
-					value:'澳'
-				}
+						value: '京'
+					}, {
+						value: '津'
+					}, {
+						value: '渝'
+					}, {
+						value: '沪'
+					}, {
+						value: '冀'
+					}, {
+						value: '晋'
+					},
+					{
+						value: '辽'
+					},
+					{
+						value: '吉'
+					}, {
+
+					}, {
+						value: '黑'
+					}, {
+						value: '苏'
+					}, {
+						value: '浙'
+					}, {
+						value: '皖'
+					}, {
+						value: '闽'
+					}, {
+						value: '赣'
+					}, {
+						value: '鲁'
+					}, {
+						value: '豫'
+					}, {
+						value: '鄂'
+					}, {
+						value: '湘'
+					}, {
+						value: '粤'
+					}, {
+						value: '琼'
+					}, {
+						value: '川'
+					}, {
+						value: '贵'
+					}, {
+						value: '云'
+					}, {
+						value: '陕'
+					}, {
+						value: '甘'
+					}, {
+						value: '青'
+					}, {
+						value: '内蒙古'
+					}, {
+						value: '桂'
+					}, {
+						value: '宁'
+					}, {
+						value: '新'
+					}, {
+						value: '藏'
+					}, {
+						value: '港'
+					}, {
+						value: '澳'
+					}
 				],
 				value: '',
 				date1: '',
 				date2: '',
-				value5:'',
+				value5: '',
 				forms: {
 					company_name: '',
 					legal_person: '',
@@ -231,37 +244,15 @@
 				],
 				busPic: '',
 				dates: [],
-				years:''
+				years: '',
+				imgbase_url: imgbase_url,
+				show: true,
+				dat: []
 
 			};
 		},
 		created() {
-			let _this = this;
-			getShopinfo({
-				userid: 1, //临时数据
-				get_shop_business: 1,
-			}, function(resp) {
-				_this.shopsbusiness = resp.data.shopsbusiness;
-				_this.forms.company_name = _this.shopsbusiness.company_name;
-				_this.forms.legal_person = _this.shopsbusiness.legal_person;
-				_this.forms.legal_phone = _this.shopsbusiness.legal_phone;
-				_this.forms.legal_card = _this.shopsbusiness.legal_card;
-				_this.forms.business_num = _this.shopsbusiness.business_num;
-				_this.forms.business_scope = _this.shopsbusiness.business_scope;
-				_this.value5 = new Date(String(_this.shopsbusiness.repast_permit_year)) ;
-				_this.value = _this.shopsbusiness.repast_permit_identity;
-				_this.forms.repast_permit_num = _this.shopsbusiness.repast_permit_num;
-				let time1 = _this.shopsbusiness.business_date.slice(1, length - 1);
-				let arr = time1.split(',');
-				let time2 = arr[0];
-				let stime = new Date();
-				stime.setTime(time2 * 1000);
-				_this.date1 = stime.toString();
-				let time3 = arr[1];
-				let etime = new Date();
-				etime.setTime(time3 * 1000);
-				_this.date2 = etime.toString();
-			});
+			this.getData();
 		},
 		methods: {
 			handleAvatarSuccess(res, file) {
@@ -282,6 +273,8 @@
 				return isJPG && isLt2M;
 			},
 			onSubmit() {
+				let id = ls.getItem("public#shopinfo");
+				let userID = id.userinfo.userid;
 				let t = new Date(this.date1);
 				let startTime = t.getFullYear() + '-' + (t.getMonth() + 1) + '-' + t.getDate();
 				let statime = startTime;
@@ -294,29 +287,35 @@
 				sta2 = sta2 / 1000;
 				this.dates.push(sta1, sta2);
 				let t3 = new Date(this.value5);
-				 this.years = t3.getFullYear();
+				this.years = t3.getFullYear();
 				let data = {
 					save_shop_business: 1,
-					userid: 1, //临时数据
+					userid: userID,
 					company_name: this.forms.company_name,
 					legal_person: this.forms.legal_person,
 					legal_phone: this.forms.legal_phone,
 					legal_card: this.forms.legal_card,
 					business_num: this.forms.business_num,
 					repast_permit_identity: this.value,
-					repast_permit_year:this.years,
+					repast_permit_year: this.years,
+					legal_card_photo: [
+						"965ae586db8f2b7b4a3f3ea5ba10316f.jpg",
+						"86844c0d267b5dd50512805d09d415f8.jpg"
+					],
+					business_photo: "28a24dec0acf137e1ec6fc937feeadd3.jpg",
+					repast_permit_photo: "a66357faac0dd7b74285a46b3d39b025.jpg",
+					confirmation: "3ed1a968d391e0c64f13d4be86304b30.jpg",
 					repast_permit_num: this.forms.repast_permit_num,
 					business_scope: this.forms.business_scope,
 					business_date: this.dates
 				};
 				saveShopinfo(data, this.alts);
-				//console.log(data)
 			},
 			alts(resp) {
 				if(resp.ret === 0) {
 					this.$router.push({
-						path: '/shop'
-					});
+					path: '/shop'
+				});
 				} else {
 					alert('保存失败');
 				}
@@ -324,6 +323,45 @@
 			goBack() {
 				this.$router.push({
 					path: '/shop'
+				});
+			},
+			getData() {
+				let id = ls.getItem("public#shopinfo");
+				let userID = id.userinfo.userid;
+				let _this = this;
+				getShopinfo({
+					userid: userID,
+					get_shop_business: 1,
+				}, function(resp) {
+					_this.shopsbusiness = resp.data.shopsbusiness;
+					_this.forms.company_name = _this.shopsbusiness.company_name;
+					_this.forms.legal_person = _this.shopsbusiness.legal_person;
+					_this.forms.legal_phone = _this.shopsbusiness.legal_phone;
+					_this.forms.legal_card = _this.shopsbusiness.legal_card;
+					_this.forms.business_num = _this.shopsbusiness.business_num;
+					_this.forms.business_scope = _this.shopsbusiness.business_scope;
+					_this.value5 = new Date(String(_this.shopsbusiness.repast_permit_year));
+					_this.value = _this.shopsbusiness.repast_permit_identity;
+					_this.forms.repast_permit_num = _this.shopsbusiness.repast_permit_num;
+					_this.main[0].imgs = _this.shopsbusiness.legal_card_photo[0];
+					_this.main[1].imgs = _this.shopsbusiness.legal_card_photo[1];
+					let time1 = _this.shopsbusiness.business_date.slice(1, length - 1);
+					let arr = time1.split(',');
+					let time2 = arr[0];
+					let stime = new Date();
+					stime.setTime(time2 * 1000);
+					_this.date1 = stime.toString();
+					let time3 = arr[1];
+					let etime = new Date();
+					etime.setTime(time3 * 1000);
+					_this.date2 = etime.toString();
+					let time4 = _this.shopsbusiness.business_date.slice(1, length - 1);
+					let arr3 = time1.split(',');
+					let time5 = arr[0];
+					let time6 = arr[1];
+					let s1time = Util.TimeTo(time5, 'yyyy-MM-dd');
+					let e1time = Util.TimeTo(time6, 'yyyy-MM-dd');
+					_this.dat.push(s1time, e1time);
 				});
 			}
 		}
@@ -333,6 +371,9 @@
 <style lang="scss" scoped>
 	@import 'src/styles/mixin.scss';
 	.warp {
+		.domain {
+			padding-left: 14px;
+		}
 		.nvs {
 			background: #EFF3FA;
 			height: 26px;
@@ -450,7 +491,7 @@
 				.bottom {
 					width: 80%;
 					text-align: center;
-					margin-bottom: 30px;
+					margin-bottom: 50px;
 					margin-left: 40px;
 					.blue {
 						@include fc(16px, #ffffff);
@@ -493,7 +534,7 @@
 			@include wh(280px, 34px);
 		}
 		.el-form--inline .el-form-item {
-			margin-right: -30px;
+			margin-right: -19px;
 		}
 		.el-form-item__label {
 			padding: 11px 0;
@@ -545,29 +586,29 @@
 		.el-breadcrumb__item:last-child .el-breadcrumb__item__inner:hover {
 			color: #4877E7;
 		}
-		.citys .el-date-editor.el-input{
-			@include wh(120px,34px);
+		.citys .el-date-editor.el-input {
+			@include wh(120px, 34px);
 		}
-		.citys .el-icon-date:before{
-			content:"";
+		.citys .el-icon-date:before {
+			content: "";
 			position: absolute;
-			top:0px;
-			right:-13px;
-			@include wh(34px,34px);
+			top: 0px;
+			right: -13px;
+			@include wh(34px, 34px);
 			background: url(../../img/sanjiao.png)no-repeat;
 			cursor: pointer;
 		}
-		.el-icon-caret-top:before{
+		.el-icon-caret-top:before {
 			content: '';
 			position: absolute;
-			top:0px;
-			right:0px;
-			@include wh(34px,34px);
+			top: 0px;
+			right: 0px;
+			@include wh(34px, 34px);
 			background: url(../../img/sanjiao.png)no-repeat;
 		}
-		.el-select .el-input .el-input__icon{
-			transform:inherit;
-			top:0;
+		.el-select .el-input .el-input__icon {
+			transform: inherit;
+			top: 0;
 			/*background:#eee;*/
 		}
 	}

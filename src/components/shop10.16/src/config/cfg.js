@@ -335,6 +335,21 @@ export const SaleStatus = {
     }
 };
 
+//菜品类型
+export const GoodType = {
+    DISH: 1,    
+    ACCESSORY: 2,
+    DRINK: 3,
+    code: {
+        1: "菜品",
+        2: "配件",
+        3: "酒水",
+    },
+    toString: function (code) {
+        code = parseInt(code || 0);
+        return this.code[code] || '未知[' + code + ']';
+    }
+};
 //餐时 
 
 export const Dinnertime = {
@@ -371,3 +386,11 @@ export const Certificationstatus = {
         return this.code[code] || '未知[' + code + ']';
     }
 };
+
+//搜索框  判断是不是全选
+export const chooseAll ={
+	code: {
+		0:'全部'
+	}
+};
+//餐位费结算方式

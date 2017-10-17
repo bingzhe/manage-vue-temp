@@ -2,7 +2,7 @@
 	<div>
 		<!--头部导航-->
 		<div class="header">
-			<p><span>店铺管理</span>><span>餐桌管理</span>><span class="blue">新建餐桌设置</span></p>
+			<p><span>店铺管理</span>><span>餐桌管理</span>><span class="blue"v-if="$route.query.id==null">添加餐桌</span><span class="blue" v-else>编辑餐桌信息</span></p>
 		</div>
 		<div class="text">
 			基础设置
@@ -28,7 +28,6 @@
 			 	 <el-radio-group v-model="form[item.id]" fill="#4877E7"  @change="handEdit(item)">
 				    <el-radio-button :label="$data[item.id]" v-if="$data[item.id]"></el-radio-button>
 				    <el-radio-button label="编辑" class="add" ref="item.id"></el-radio-button>
-				    
 			  	</el-radio-group>
 			   </el-form-item>
 			   </div>
@@ -40,11 +39,21 @@
 			      <el-radio label="3">按订单金额百分比</el-radio>
 			    </el-radio-group>
 			  </el-form-item>
-			   <el-form-item label="餐位费" prop="PRICE" v-if="form.PRICE!=='0'&&form.PRICE!==''">
-			    <el-input  v-model="form.PRICE" class="price">
+			   <el-form-item label="餐位费" prop="PRICE" v-if="form.PRICE=='1'">
+			    <el-input v-model="inputValue" class="price">
 			    	 <el-button slot="append" size="small" >元</el-button>
 			    </el-input>
-			  </el-form-item>
+			     </el-form-item>
+			     <el-form-item label="餐位费" prop="PRICE" v-if="form.PRICE=='2'">
+			    <el-input v-model="inputValue" class="price">
+			    	 <el-button slot="append" size="small" >元</el-button>
+			    </el-input>
+			     </el-form-item>
+			       <el-form-item label="餐位费" prop="PRICE" v-if="form.PRICE=='3'">
+			    <el-input v-model="inputValue" class="price">
+			    	 <el-button slot="append" size="small" >%</el-button>
+			    </el-input>
+			     </el-form-item>
 			  <el-form-item label="最低消费">
 			    <el-input  v-model="price" class="price">
 			    	 <el-button slot="append" size="small" >元</el-button>
@@ -68,30 +77,30 @@
 	export default{
 		data() {
 			return{
-				historyText:"",
-				selectName:"",
-				showTag:false,
-				id:null,
-		        price:10.5,
-		        TABLE_TYPE:"",
-		        SEAT_TYPE:"",
-		        SEAT_REGION:"",
-		       	SEAT_FEE:"",
-		        form: {
-		          TABLE_NO: '',
-		          SEAT_NAME: '',
-		          SEAT_TYPE: '',
-		          SEAT_SIZE: '',
-		          SEAT_REGION: "",
-		          TABLE_TYPE:"",
-		          PRICE:""
+				historyText:"",//历史标签内容
+				selectName:"",//点击编辑，显示在编辑标签页面的信息
+				showTag:false,//是否显示编辑弹框
+				inputValue:"",//餐位费支付方式输入框的值
+				id:null,//餐桌列表单行中点击标签后，路由传过来的单行的信息
+		        price:"",//最低消费金额
+		        TABLE_TYPE:"",//桌型
+		        SEAT_TYPE:"",//餐桌类型
+		        SEAT_REGION:"",//餐桌区域
+		        form: {			//餐桌列表中的信息
+		          TABLE_NO: '',//餐桌编号
+		          SEAT_NAME: '',//餐桌台号（名称）
+		          SEAT_TYPE: '',//餐桌类型
+		          SEAT_SIZE: '',//可供就餐人数
+		          SEAT_REGION: "",//餐桌区域
+		          TABLE_TYPE:"",//桌型
+		          PRICE:"" //餐位费结算方式
 		        },
-		        nameArray:[
+		        nameArray:[//方便页面显示循环
 		        	{label: '餐桌区域', id: 'SEAT_REGION'},
                     {label: '餐桌类型', id: 'SEAT_TYPE'},
                     {label: '桌型', id: 'TABLE_TYPE'},
 		        ],
-		        rules: {
+		        rules: {	//表单验证规则
 		          SEAT_NAME: [
 		            { required: true, message: '请输入餐桌台号（名称）' }
 		          ],
@@ -110,31 +119,26 @@
 		},
 		components:{selectEdit},
 		created() {
-			console.log(1111)
-			//新建获取餐桌编号
-			
-			if(this.$route.query.id!=undefined){
-			this.id = this.$route.query.id
-			console.log(this.$route.query.id)
-			this.TABLE_TYPE=this.form.TABLE_TYPE=this.id.seat_shape||"";
-			this.form.TABLE_NO=this.id.seat_id;
-			this.form.SEAT_NAME=this.id.seat_name;
-			this.form.SEAT_SIZE=this.id.seat_size;
-			this.SEAT_FEE=Number(this.id.seat_size*1.5);
-			this.SEAT_REGION=this.form.SEAT_REGION=this.id.seat_region||"大厅";
-			this.SEAT_TYPE=this.form.SEAT_TYPE=this.id.seat_type||"散座";	
-			}else{
-				apiMethods.getId({
-				genid:1,
-				type:"seat"
-			},(res)=>{
-				this.form.TABLE_NO = res.data.id;
-			})
-			}
-			
-			
+					//新建获取餐桌编号
+					if(this.$route.query.id!=undefined) {
+					this.id = this.$route.query.id
+					this.TABLE_TYPE=this.form.TABLE_TYPE=this.id.seat_shape||"";
+					this.form.TABLE_NO=this.id.seat_id;
+					this.form.SEAT_NAME=this.id.seat_name;
+					this.form.SEAT_SIZE=this.id.seat_size;
+					this.SEAT_REGION=this.form.SEAT_REGION=this.id.seat_region||"";
+					this.SEAT_TYPE=this.form.SEAT_TYPE=this.id.seat_type||"";	
+					}else{
+						apiMethods.getId({
+						genid:1,
+						type:"seat"
+						},(res)=>{
+							this.form.TABLE_NO = res.data.id;
+						})
+					}
 		},
 		computed:{
+			//控制是否显示编辑框
 			showSelectEdit() {
 				return this.showTag
 			}
@@ -142,11 +146,10 @@
 		methods:{
 			//点击保存
 			onSave() {
-				console.log(this.form.TABLE_NO)
 				apiMethods.changeTableData({
 	      			seat_save:1,
 		        	seat_id:this.form.TABLE_NO, //餐桌id
-		        	price:this.form.PRICE,//餐位费
+		        	price:this.inputValue,//餐位费
 		        	seat_name:this.form.SEAT_NAME,//餐桌台号（名称）
 		        	seat_region:this.form.SEAT_REGION,//就餐区域
 		        	seat_shape:this.form.TABLE_TYPE,//桌型
@@ -155,7 +158,6 @@
 		        	consume_min:this.price,//最低消费
 		        	price_type:this.form.PRICE//餐位费结算方式
 	      		},(resp)=>{
-	      			console.log(resp)
 	      			this.$router.go(-1)
 	      		})
 			},
@@ -190,18 +192,19 @@
 	      			
 	      		})
 			},
+			//编辑标签页面点击确定传过来的数据
 			show(data) {
-				this.showTag=false
-				this.$data[data[1]]=data[0];
-				this.form[data[1]]=this.$data[data[1]];
+					this.showTag=false
+					this.$data[data[1]]=data[0];
+					this.form[data[1]]=this.$data[data[1]];
 			},
+			//编辑标签页面点击取消传过来的数据
 			show2(data) {
-				this.showTag=false;	
-				this.form[data]=this.$data[data]
+					this.showTag=false;	
+					this.form[data]=this.$data[data]
 			}
 		},
 			
-		
 	}
 </script>
 
@@ -307,4 +310,22 @@
 		background:#4877E7;
 		border: 1px solid #4877E7;
 	}
+	.add .el-radio-button__inner {
+	white-space: nowrap;
+	/*background: #fff;*/
+	/*border: 1px solid #bfcbd9;*/
+	/*border-left: 0;*/
+	/*color: #1f2d3d;*/
+	width: 80px !important;
+	-webkit-appearance: none;
+	text-align: center;
+	/*box-sizing: border-box;*/
+	outline: 0;
+	margin: 0;
+	cursor: pointer;
+	transition: all .3s cubic-bezier(.645, .045, .355, 1);
+	/*padding: 10px 15px;*/
+	font-size: 14px;
+	border-radius: 0
+}
 </style>

@@ -5,7 +5,7 @@
 			<div class="btn">
 				<!--名称或编号-->
 				<el-select allow-create filterable v-model="no" placeholder="名称或编号">
-					<el-option label="全部" :value="no">
+					<el-option label="全部" value="全部">
 					</el-option>
 					<el-option v-for="item in  tableData " :label="item.seat_id" :value="item.seat_id" :key="item.seat_id">
 					</el-option>
@@ -13,7 +13,7 @@
 				</el-select>
 				<!--餐桌类型-->
 				<el-select allow-create filterable v-model="table" placeholder="餐桌类型">
-					<el-option label="全部" :value="table">
+					<el-option label="全部" value="全部">
 					</el-option>
 					<el-option v-for="item in  tableData " :label="item.seat_name" :value="item.seat_name" :key="item.seat_name">
 					</el-option>
@@ -32,7 +32,8 @@
 				</router-link>
 				<!--导出二维码-->
 				<button class="blue export_button" @click="handleDownload">
-					导出二维码
+						<span v-if="!multipleSelection.length">导出二维码</span>
+						<a :href="downLoad" class="downLoad" v-if="multipleSelection.length">导出二维码</a>
 				</button>
 				<!--删除-->
 				<button  class=" red delete_button"@click="deleteDatasInBtnGroup()">
@@ -43,7 +44,7 @@
 
 		<!--列表-->
 		<div class="table_info">
-			<el-table :data="tableList" @selection-change="selectItem" :row-class-name="tableRowClassName" style="width: 100%" highlight-current-row>
+			<el-table :data="tableList" @selection-change="selectItem"style="width: 100%" stripe>
 				<el-table-column type="selection" width="35">
 				</el-table-column>
 				<el-table-column prop="seat_id" label="编号" align="center" width="180" sortable  
@@ -54,7 +55,7 @@
 				<el-table-column prop="seat_region" label="餐桌区域"align="center"width="180" >
 				</el-table-column>
 				<el-table-column prop="seat_type" label="餐桌类型" align="center"width="180">
-				</el-table-column>
+				</el-table-column>  
 				<el-table-column prop="seat_shape" label="桌型" align="center" width="180">
 				</el-table-column>
 				<el-table-column prop="seat_size" label="可供就餐人数" align="center" width="180" sortable 
@@ -104,9 +105,11 @@
 
 <script>
 import { apiMethods } from'../api';
+import {commonMethods} from '../index'
 export default {
 	data() {
 		return {
+			downLoad:"",//下载链接
 			deleted:false,
 			deletedNo:"",
 			no: "",//名称或编号
@@ -125,15 +128,6 @@ export default {
 		};
 	},
 	methods: {
-			
-			//表格斑马线
-			tableRowClassName(row, index) {
-				if (index % 2 === 0) {
-					return "info-row";
-				} else if (index % 2 === 1) {
-					return "positive-row";
-				}
-			},
 			//复选框
 			selectItem(val) {
 				this.multipleSelection = val;
@@ -154,20 +148,19 @@ export default {
       		//点击确定
       		confirm() {
       			this.deleted=false;
-      				apiMethods.changeTableData({
-		        		seat_delete:1,
-		        		seat_id_list:JSON.stringify([this.deletedNo])
-		        	},(resp)=>{
+  				apiMethods.changeTableData({
+	        		seat_delete:1,
+	        		seat_id_list:JSON.stringify([this.deletedNo])
+	        	},(resp)=>{
 			      	setTimeout(() => {
 		             apiMethods.shallowRefresh(this.$route.name)
 		            }, 50)
-	      		
-		        })
+      		
+	       	 })
       		},
 		    //点击取消
 		    cancel() {
 		    	this.deleted=false;
-		    	
 		    },
       		//多选删除
       		deleteDatasInBtnGroup() {
@@ -175,7 +168,6 @@ export default {
 			          alert("你还没有勾选任何选项")
 			          return;
 		        }
-      			console.log(this.getSelectedIds())
 	      		apiMethods.changeTableData({
 	      			seat_delete:1,
 		        	seat_id_list:JSON.stringify(this.getSelectedIds())
@@ -199,8 +191,8 @@ export default {
 			},
 			//点击搜索
 			handleFilter() {
-				this.listQuery.page = 1;
-				this.tableList = apiMethods.search(this.no,this.table,this.tableData)
+				this.getTotal()
+				this.tableList = apiMethods.search(this.no,this.table,this.testList).filter((item, index) => index < this.listQuery.limit * this.listQuery.page && index >= this.listQuery.limit * (this.listQuery.page - 1))
 			},
 			//获取总条目数
 			getTotal() {
@@ -213,23 +205,25 @@ export default {
 			},
 			//选择每页显示的条目数
 			handleSizeChange(val) {
-				console.log(this.listQuery.page)
 			     this.listQuery.limit = val;
 			     this.tableList=this.testList.filter((item, index) => index < this.listQuery.limit * this.listQuery.page && index >= this.listQuery.limit * (this.listQuery.page - 1))
 			     this.getTotal()
-			     console.log(this.tableList)
 			},
 			//选择当前页码
 			handleCurrentChange(val) {
-				 this.listQuery.page  = val
-				 console.log(this.tableList)
+				this.listQuery.page  = val
 				this.tableList=this.testList.filter((item, index) => index < this.listQuery.limit * this.listQuery.page && index >= this.listQuery.limit * (this.listQuery.page - 1))
 				this.getTotal()
-				console.log(val)
 			},
 			//点击导出
 			handleDownload() {
-
+				if (!this.multipleSelection.length) {
+		          alert("你还没有勾选任何选项")
+		          return;
+	       		}else{
+			       	$(".downLoad").attr("qrcode","download")
+			      	this.downLoad="http://www.ob.com:8080/php/img_get.php?batch_export_seat_qrcode=1&seat_list="+JSON.stringify(this.getSelectedIds())+"&shop_id='4'"
+	        	}  
 			}
 	},
 	created() {
@@ -242,12 +236,10 @@ export default {
 				this.tableData = resp.data.seatlist
 				this.tableList = resp.data.seatlist
 				this.testList = resp.data.seatlist
+				this.getTotal()
+				this.tableList=this.testList.filter((item, index) => index < this.listQuery.limit * this.listQuery.page && index >= this.listQuery.limit * (this.listQuery.page - 1))
+				
 			})
-			this.tableList=this.testList.filter((item, index) => index < this.listQuery.limit * this.listQuery.page && index >= this.listQuery.limit * (this.listQuery.page - 1))
-			
-			
-//			console.log(this.total)
-			
 	},
 	mounted() {
 //		this.getTotal()
@@ -315,16 +307,8 @@ export default {
 .table_info .el-table-column{
 	padding: 0;
 }
-
-.el-table .info-row {
-	background: white;
-}
-
-.el-table .positive-row {
-	background: #F6F8FC ;
-}
 .pagination-container{
-	margin-top: 50px;
+	margin: 50px 689px;
 	font-family: MicrosoftYaHei;
 	font-size: 12px;
 	color: #666666;
