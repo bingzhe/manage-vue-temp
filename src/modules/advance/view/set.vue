@@ -1,13 +1,18 @@
 <template>
     <div>
         预定设置
+        <img-s></img-s>
     </div>
 </template>
 
 <script>
-export default{
+import ImgS from "./imgSorpper";
 
-}
+export default {
+  components: {
+    ImgS,
+  }
+};
 </script>
 
 <style lang="scss" scoped>
