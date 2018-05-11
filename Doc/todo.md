@@ -2,8 +2,6 @@
 
 #### 引入sass
 #### 引入eslint
-
-
 ``` js
 //添加
 "lintfix": "eslint --fix --ext .js,.vue src test/unit test/e2e/specs"
@@ -20,6 +18,9 @@ npm run lintfix
     "plugins": ["html"]
     }
 ```
+#### 引入element-ui
+
+element-ui版本2.3.7
 
 ## todo
 #### 基本布局搭建
