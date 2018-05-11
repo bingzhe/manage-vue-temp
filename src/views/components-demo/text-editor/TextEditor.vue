@@ -1,15 +1,11 @@
 <template>
   <div>
-      TheMain
+      TextEditor
   </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {};
-  }
-};
+export default {};
 </script>
 
 <style lang="scss" scoped>
