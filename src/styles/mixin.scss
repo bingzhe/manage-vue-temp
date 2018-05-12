@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 //宽高
 @mixin wh($width, $height) {
     width: $width;

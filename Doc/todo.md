@@ -22,5 +22,30 @@ npm run lintfix
 
 element-ui版本2.3.7
 
+#### 加载全局sass文件
+
+每个组件里加载一个设置文件，而无需每次都将其显式导入如为所有组件全局使用 scss 变。安装`sass-resources-loader`
+
+``` js
+npm install sass-resources-loader --save-dev
+
+//webpack规则
+{
+  loader: 'sass-resources-loader',
+  options: {
+    resources: path.resolve(__dirname, '../src/style/_variables.scss')
+  }
+}
+//vue-cli中，修改build/utils.js
+scss: generateLoaders('sass').concat(
+  {
+    loader: 'sass-resources-loader',
+    options: {
+      resources: path.resolve(__dirname, '../src/style/_variables.scss')
+    }
+  }
+),
+```
+
 ## todo
 #### 基本布局搭建
