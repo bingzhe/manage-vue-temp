@@ -1,8 +1,8 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import HelloWorld from '@/components/HelloWorld';
-import TheMain from '@/views/main/TheMain';
-import { routers, otherRouter, appRouter } from './router';
+import Vue from "vue";
+import Router from "vue-router";
+import HelloWorld from "@/components/HelloWorld";
+import TheMain from "@/views/main/TheMain";
+import { routers, otherRouter, appRouter } from "./router";
 
 Vue.use(Router);
 

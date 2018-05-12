@@ -23,7 +23,7 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'indent': [2, 2, { 'SwitchCase': 1 }], //缩进风格
-    "quotes": ["error", "single"],
+    "quotes": ["error", "double"],
     "semi": ["error", "always"],
     "no-console": ["error"],
     "no-empty": 2,
