@@ -6,6 +6,8 @@
             background-color="#304156"
             text-color="#bfcbd9"
             active-text-color="#409EFF"
+            :collapse="false"
+            :router="false"
             >
             <sidebar-item></sidebar-item>
         </el-menu>

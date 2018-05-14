@@ -2,15 +2,14 @@
   <div class="main">
     <el-container>
       <el-aside  width="256px">
-        <!-- <sidebar-menu></sidebar-menu> -->
-        111
+        <sidebar-menu></sidebar-menu>
       </el-aside>
       <el-container class="right-content">
         <el-header height="64px">22</el-header>
         <el-main>
           <!-- <transition name="fade" mode="out-in">
             <keep-alive :include="cachedViews"> -->
-              <!-- <router-view></router-view> -->
+              <router-view></router-view>
             <!-- </keep-alive>
           </transition> -->
         </el-main>
@@ -20,15 +19,16 @@
 </template>
 
 <script>
-import SidebarMenu from "./sidebar/SidebarMenu";
+import SidebarMenu from "./sidebar/SidebarMenu.vue";
 
 export default {
   components: {
-    // SidebarMenu
+    SidebarMenu
   },
   data() {
     return {};
-  }
+  },
+  mounted() {}
 };
 </script>
 
@@ -42,9 +42,9 @@ export default {
   padding: 0 14px;
 }
 
-// .el-aside {
-//   background-color: #d3dce6;
-// }
+.el-aside {
+  background-color: #001529;
+}
 
 .right-content {
   min-height: 100vh;
