@@ -1,11 +1,13 @@
 <template>
   <div class="main">
     <el-container>
-      <el-aside  width="256px">
+      <el-aside  :width="shrink ? '256px' : '256px'">
         <sidebar-menu></sidebar-menu>
       </el-aside>
       <el-container class="right-content">
-        <el-header height="64px">22</el-header>
+        <el-header height="64px">
+          <narbar-menu></narbar-menu>
+        </el-header>
         <el-main>
           <!-- <transition name="fade" mode="out-in">
             <keep-alive :include="cachedViews"> -->
@@ -19,14 +21,22 @@
 </template>
 
 <script>
-import SidebarMenu from "./sidebar/SidebarMenu.vue";
+import SidebarMenu from "./sidebar/SidebarMenu";
+import NarbarMenu from "./narbar/index";
+import { mapState } from "vuex";
 
 export default {
   components: {
-    SidebarMenu
+    SidebarMenu,
+    NarbarMenu
   },
   data() {
     return {};
+  },
+  computed: {
+    ...mapState({
+      shrink: state => state.app.shrink
+    })
   },
   mounted() {}
 };
@@ -40,6 +50,7 @@ export default {
 .el-header {
   line-height: 64px;
   padding: 0 14px;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 }
 
 .el-aside {

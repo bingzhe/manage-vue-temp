@@ -2,11 +2,10 @@
     <div>
         <el-menu
             mode="vertical"
-            :show-timeout="200"
             background-color="#304156"
             text-color="#bfcbd9"
             active-text-color="#409EFF"
-            :collapse="false"
+            :collapse="shrink"
             :router="false"
             >
             <sidebar-item></sidebar-item>
@@ -16,10 +15,16 @@
 
 <script>
 import SidebarItem from "./SidebarMenuItem";
+import { mapState } from "vuex";
 
 export default {
   components: {
     SidebarItem
+  },
+  computed: {
+    ...mapState({
+      shrink: state => state.app.shrink
+    })
   },
   data() {
     return {};
@@ -28,7 +33,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.el-menu {
+  border-right: none;
+}
 </style>
 
 
